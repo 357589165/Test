@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SSE 推送测试</title>
+</head>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    if (!!!window.EventSource){
+        let log = "当前浏览器不支持SSE 推送技术，请更换浏览器";
+        alert(log); throw log;
+    }
+    const source = new EventSource("/sseGet");
+    source.addEventListener("message", function (e) {
+        $("#home").html(e.data);
+    })
+</script>
+<body>
+    <h1>测试内容</h1>
+    <div id="home"></div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax 轮训测试</title>
+</head>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    setInterval(function () {
+        $.get("/pollingGet", function (e) {
+            $("#home").html(e);
+        });
+    }, 1000)
+</script>
+<body>
+    <h1>测试内容</h1>
+    <div id="home"></div>
+</body>
+</html>
