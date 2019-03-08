@@ -2,9 +2,11 @@ package com.example.demo.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author 王超 by 2019-03-07
@@ -15,25 +17,31 @@ public class LongPollingUtils {
     @Autowired
     SimpleDateFormat simpleDateFormat;
 
-    private String dataUpdateTime = null;
+    private DeferredResult<String> deferredResult = null;
 
     @PostConstruct
     public void init(){
         new Thread(() -> {
-            for(;;){
-                dataUpdateTime = "数据最后更新时间:" + simpleDateFormat.format(System.currentTimeMillis());
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            String result = "服务器当前刷新时间:" + simpleDateFormat.format(System.currentTimeMillis());
+            for (;;){
+                if(this.deferredResult != null){
+                    this.deferredResult.setResult(result);
                 }
+                sleep();
             }
         }).start();
     }
 
-    public String getDataUpdateTime() {
-        String result = this.dataUpdateTime;
-        this.dataUpdateTime = null;
-        return result;
+    private void sleep(){
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
+
+    public void addDeferredResult(DeferredResult<String> deferredResult){
+        this.deferredResult = deferredResult;
+    }
+
 }
