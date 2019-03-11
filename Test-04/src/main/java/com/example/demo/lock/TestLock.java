@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.lock;
 
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -23,16 +23,13 @@ public class TestLock implements Lock {
         while (!af.compareAndSet(null, Thread.currentThread())){
             queue.add(Thread.currentThread());
             LockSupport.park();
-            queue.remove(Thread.currentThread());
         }
     }
 
     @Override
     public void unlock() {
         if(af.compareAndSet(Thread.currentThread(), null)){
-            for(Thread t : this.queue){
-                LockSupport.unpark(t);
-            }
+            LockSupport.unpark(queue.poll());
         }
     }
 
