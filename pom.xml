@@ -8,6 +8,7 @@
         <module>Test-02</module>
         <module>Test-03</module>
         <module>Test-04</module>
+        <module>Test-05</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
